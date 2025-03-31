@@ -6,6 +6,9 @@
   </head>
   <body>
     <a-scene xr-mode="true">
+      <!-- 球体 -->
+      <a-sphere id="movable-sphere" position="0 1 -3" radius="0.3" color="blue"></a-sphere>
+
       <!-- ハンドトラッキングのコントローラー -->
       <a-entity id="left-hand" hand-tracking-controls="hand: left"></a-entity>
       <a-entity id="right-hand" hand-tracking-controls="hand: right"></a-entity>
@@ -15,15 +18,12 @@
 
     <script>
       const joints = [
-        "wrist", "thumb-metacarpal", "thumb-phalanx-proximal", "thumb-phalanx-distal", "thumb-tip",
-        "index-finger-metacarpal", "index-finger-phalanx-proximal", "index-finger-phalanx-intermediate", "index-finger-phalanx-distal", "index-finger-tip",
-        "middle-finger-metacarpal", "middle-finger-phalanx-proximal", "middle-finger-phalanx-intermediate", "middle-finger-phalanx-distal", "middle-finger-tip",
-        "ring-finger-metacarpal", "ring-finger-phalanx-proximal", "ring-finger-phalanx-intermediate", "ring-finger-phalanx-distal", "ring-finger-tip",
-        "pinky-finger-metacarpal", "pinky-finger-phalanx-proximal", "pinky-finger-phalanx-intermediate", "pinky-finger-phalanx-distal", "pinky-finger-tip"
+        "wrist", "thumb-tip", "index-finger-tip", "middle-finger-tip", "ring-finger-tip", "pinky-finger-tip"
       ];
-
       let lastTime = performance.now();
       let fps = 0;
+      let dragging = false;
+      let grabbedHand = null;
 
       function calculateFPS() {
         const currentTime = performance.now();
@@ -34,6 +34,11 @@
 
       function logJointData(hand, jointName, position) {
         console.log(`${hand} - ${jointName}: (${position.x.toFixed(3)}, ${position.y.toFixed(3)}, ${position.z.toFixed(3)})`);
+      }
+
+      function moveSphere(position) {
+        const sphere = document.getElementById("movable-sphere");
+        sphere.setAttribute("position", `${position.x} ${position.y} ${position.z}`);
       }
 
       AFRAME.registerComponent("track-hands", {
@@ -49,11 +54,30 @@
                   const joint = hand.joints[jointName];
                   if (joint) {
                     logJointData(handId, jointName, joint.position);
+                    if (!dragging && jointName === "index-finger-tip" && !grabbedHand) {
+                      const spherePos = document.getElementById("movable-sphere").getAttribute("position");
+                      const distance = Math.sqrt(
+                        Math.pow(joint.position.x - spherePos.x, 2) +
+                        Math.pow(joint.position.y - spherePos.y, 2) +
+                        Math.pow(joint.position.z - spherePos.z, 2)
+                      );
+                      if (distance < 0.4) {
+                        dragging = true;
+                        grabbedHand = handId;
+                      }
+                    }
+                    if (dragging && handId === grabbedHand && jointName === "index-finger-tip") {
+                      moveSphere(joint.position);
+                    }
                   }
                 });
               }
             }
           });
+
+          if (dragging && !grabbedHand) {
+            dragging = false;
+          }
         },
       });
 
