@@ -1,0 +1,103 @@
+<html>
+  <head>
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aframe-hand-tracking-controls@3.3.0/dist/aframe-hand-tracking-controls.min.js"></script>
+  </head>
+  <body>
+    <a-scene xr-mode="true">
+      <!-- ハンドトラッキングのコントローラー -->
+      <a-entity id="left-hand" hand-tracking-controls="hand: left"></a-entity>
+      <a-entity id="right-hand" hand-tracking-controls="hand: right"></a-entity>
+
+      <a-camera position="0 1.6 0"></a-camera>
+    </a-scene>
+
+    <script>
+      const joints = [
+        "wrist",
+        "thumb-metacarpal",
+        "thumb-phalanx-proximal",
+        "thumb-phalanx-distal",
+        "thumb-tip",
+        "index-finger-metacarpal",
+        "index-finger-phalanx-proximal",
+        "index-finger-phalanx-intermediate",
+        "index-finger-phalanx-distal",
+        "index-finger-tip",
+        "middle-finger-metacarpal",
+        "middle-finger-phalanx-proximal",
+        "middle-finger-phalanx-intermediate",
+        "middle-finger-phalanx-distal",
+        "middle-finger-tip",
+        "ring-finger-metacarpal",
+        "ring-finger-phalanx-proximal",
+        "ring-finger-phalanx-intermediate",
+        "ring-finger-phalanx-distal",
+        "ring-finger-tip",
+        "pinky-finger-metacarpal",
+        "pinky-finger-phalanx-proximal",
+        "pinky-finger-phalanx-intermediate",
+        "pinky-finger-phalanx-distal",
+        "pinky-finger-tip"
+      ];
+
+      let lastTime = performance.now();
+      let fps = 0;
+
+      function calculateFPS() {
+        const currentTime = performance.now();
+        fps = 1000 / (currentTime - lastTime);
+        lastTime = currentTime;
+      }
+
+      function downloadCSV(data, filename) {
+        const blob = new Blob([data], { type: "text/csv" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+
+      const handData = [];
+      const header = ["timestamp", "fps", "hand", "joint", "x", "y", "z"];
+      handData.push(header.join(","));
+
+      function logJointData(hand, jointName, position) {
+        const timestamp = new Date().toISOString();
+        const line = [timestamp, fps.toFixed(2), hand, jointName, position.x, position.y, position.z];
+        handData.push(line.join(","));
+      }
+
+      AFRAME.registerComponent("track-hands", {
+        tick: function () {
+          calculateFPS();
+
+          ["left-hand", "right-hand"].forEach((handId) => {
+            const handEl = document.getElementById(handId);
+            if (handEl) {
+              const hand = handEl.components["hand-tracking-controls"].controller;
+              if (hand) {
+                joints.forEach((jointName) => {
+                  const joint = hand.joints[jointName];
+                  if (joint) {
+                    logJointData(handId, jointName, joint.position);
+                  }
+                });
+              }
+            }
+          });
+
+          // 一定回数ごとにCSV出力（FPSが高いとデータが多すぎるため調整）
+          if (handData.length > 5000) {
+            downloadCSV(handData.join("\n"), "hand_tracking_data.csv");
+            handData.length = 1; // ヘッダーを残してデータをクリア
+          }
+        },
+      });
+
+      document.querySelector("a-scene").setAttribute("track-hands", "");
+    </script>
+  </body>
+</html>
