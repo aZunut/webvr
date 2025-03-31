@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta name="description" content="Hello, WebVR! • A-Frame">
-    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://unpkg.com/aframe-environment-component@1.3.0/dist/aframe-environment-component.min.js"></script>
+    <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aframe-hand-tracking-controls@3.3.0/dist/aframe-hand-tracking-controls.min.js"></script>
   </head>
   <body>
-    <a-scene vr-mode-ui="enabled: true" webxr="true">
+    <a-scene vr-mode-ui="enabled: true" webxr="true" obb-collider="showColliders: true">
       <!-- 球体 -->
       <a-sphere grabbable id="movable-sphere" position="0 1.5 -1" radius="0.3" color="blue"></a-sphere>
 
       <!-- ハンドトラッキングのコントローラー -->
       <a-entity id="left-hand" hand-tracking-controls="hand: left"></a-entity>
       <a-entity id="right-hand" hand-tracking-controls="hand: right"></a-entity>
+
+      <a-camera position="0 1.6 0"></a-camera>
     </a-scene>
 
-<!--     <script>
+    <script>
       const joints = [
         "wrist", "thumb-tip", "index-finger-tip", "middle-finger-tip", "ring-finger-tip", "pinky-finger-tip"
       ];
@@ -46,7 +47,7 @@
 
           ["left-hand", "right-hand"].forEach((handId) => {
             const handEl = document.getElementById(handId);
-            if (handEl) {
+            if (handEl && handEl.components["hand-tracking-controls"]) {
               const hand = handEl.components["hand-tracking-controls"].controller;
               if (hand) {
                 joints.forEach((jointName) => {
@@ -81,6 +82,6 @@
       });
 
       document.querySelector("a-scene").setAttribute("track-hands", "");
-    </script> -->
+    </script>
   </body>
 </html>
