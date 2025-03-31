@@ -1,114 +1,25 @@
-<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <title>ジェスチャーでブロック出現</title>
-    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
   </head>
   <body>
-    <a-scene vr-mode-ui="enabled: true" renderer="antialias: true">
-      
-      <!-- カメラとコントローラ -->
-      <a-entity id="rig" position="0 1.6 0">
-        <a-camera></a-camera>
-        <a-entity id="rightHand" oculus-touch-controls="hand: right"></a-entity>
-      </a-entity>
-
-      
-        <!-- 湾曲画像（画像ファイル名を変更してください） -->
-        <a-curvedimage
-          src="image/IMG_3009.jpeg"
-          height="5"
-          radius="8"
-          theta-length="360"
-          position="0 1.6 5"
-          rotation="0 180 0"
-          material="shader: flat">
-        </a-curvedimage>
-  
-        <!-- 地面と空 -->
-        <a-plane rotation="-90 0 0" width="30" height="30" color="#888"></a-plane>
-        <a-sky color="#ECECEC"></a-sky>
-
-      <!-- 敵の位置もカメラの真正面に（Z方向） -->
-       <a-entity id="enemy" position="0 1.6 -3" attackable>
-        <a-box color="#ff4444" width="1" height="1" depth="1"></a-box>
-        <a-entity position="0 1 0">
-          <!-- HPバーの土台 -->
-          <a-plane color="#ff0000" width="1.2" height="0.15"></a-plane>
-          <!-- 残HPバー -->
-          <a-plane id="hp-bar" color="#00ff00" width="1.2" height="0.15" position="0 0 0.01"></a-plane>
-        </a-entity>
-      </a-entity>
-
-      <!-- 攻撃処理：右手を振るとHPが減る -->
-      <a-entity id="rightHand" oculus-touch-controls="hand: right"></a-entity>
-
-      <script>
-        AFRAME.registerComponent('attackable', {
-          init: function () {
-            this.maxHP = 10;
-            this.hp = 10;
-            this.hpBar = this.el.querySelector('#hp-bar');
-            this.cooldown = false;
-          },
-          tick: function () {
-            const hand = document.querySelector('#rightHand').object3D;
-            const vel = hand.position.clone().sub(this.prevPos || hand.position);
-            const speed = vel.length() / ((this.prevTime) ? (performance.now() - this.prevTime) / 1000 : 1);
-            this.prevPos = hand.position.clone();
-            this.prevTime = performance.now();
-      
-            if (speed > 0.8 && !this.cooldown) {
-              this.takeDamage(1);
-              this.cooldown = true;
-              setTimeout(() => { this.cooldown = false; }, 500);
-            }
-          },
-          takeDamage: function (amount) {
-            this.hp -= amount;
-            this.hp = Math.max(0, this.hp);
-      
-            const newWidth = (this.hp / this.maxHP) * 1.2;
-            this.hpBar.setAttribute('width', newWidth);
-            this.hpBar.setAttribute('position', {
-              x: -(1.2 - newWidth) / 2,
-              y: 0,
-              z: 0.01
-            });
-      
-            if (this.hp <= 0) {
-              // アイテムを出す前に敵の位置を取得
-              const enemyPos = this.el.object3D.position.clone();
-      
-              // 敵を消す
-              this.el.parentNode.removeChild(this.el);
-      
-              // アイテムを生成
-              const scene = document.querySelector('a-scene');
-              const item = document.createElement('a-box');
-              item.setAttribute('color', '#00aaff');
-              item.setAttribute('width', 0.125); // 1/8サイズ
-              item.setAttribute('height', 0.125);
-              item.setAttribute('depth', 0.125);
-              item.setAttribute('position', {
-                x: enemyPos.x,
-                y: 0.1,
-                z: enemyPos.z
-              });
-              scene.appendChild(item);
-      
-              // 5秒後に削除
-              setTimeout(() => {
-                if (item && item.parentNode) {
-                  item.parentNode.removeChild(item);
-                }
-              }, 5000);
-            }
-          }
-        });
-      </script>
-
+    <a-scene>
+      <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
+      <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
+      <a-cylinder
+        position="1 0.75 -3"
+        radius="0.5"
+        height="1.5"
+        color="#FFC65D"
+      ></a-cylinder>
+      <a-plane
+        position="0 0 -4"
+        rotation="-90 0 0"
+        width="4"
+        height="4"
+        color="#7BC8A4"
+      ></a-plane>
+      <a-sky color="#ECECEC"></a-sky>
     </a-scene>
   </body>
 </html>
