@@ -22,6 +22,7 @@ function checkComponentRegistration() {
 
 AFRAME.registerComponent("track-hands", {
   tick: function () {
+    let d = new Date();
     let output = "";
     ["left-hand", "right-hand"].forEach((handId) => {
       const handEl = document.getElementById(handId); // 文字列に一致するidをもつものを返す
@@ -38,11 +39,11 @@ AFRAME.registerComponent("track-hands", {
           });
         } else {
           console.warn(`Hand controller not found for ${handId}`);
-          output = `Hand controller not found for ${handEl}`;
+          output = `${d}`;
         }
       } else {
         console.warn(`Hand element not found for ${handId}`);
-        output = `Hand element not found for ${handEl}`;
+        output = `${d}`;
       }
     });
 
