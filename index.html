@@ -1,28 +1,24 @@
 <!doctype html>
 <html lang="ja">
-    <head>
-        <meta chrset="UTF-8">
-        <tiltle>Hand Tracking Application</tiltle>
-        <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
-        <script src="https://unpkg.com/aframe-environment-component@1.3.x/dist/aframe-environment-component.min.js"></script>
-        <script src="./hand-tracking.js"></script>
-    </head>
-    <body>
-        <div id="coordinates">Loading...</div>
-        <div id="consoleOutput"></div>
-        <a-scene xr-mode-ui="enabled: true">
-            <!-- 球体 -->
-            <a-sphere grabbable id="movable-sphere" position="0 1.5 -1" radius="0.3" color="blue"></a-sphere>
-            <a-entity id="leftHand" hand-tracking-controls="hand: left;"></a-entity>
-            <a-entity id="rightHand" hand-tracking-controls="hand: right;"></a-entity>
-            <!-- カメラ -->
-            <a-camera position="0 1.6 0"></a-camera>
+  <head>
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aframe-hand-tracking-controls@3.3.0/dist/aframe-hand-tracking-controls.min.js"></script>
+    <script src="./hand-tracking.js"></script>
+  </head>
+  <body>
+    <a-scene vr-mode-ui="enabled: true">
+      <!-- ハンドトラッキングのコントローラー -->
+      <a-entity id="left-hand" hand-tracking-controls="hand: left"></a-entity>
+      <a-entity id="right-hand" hand-tracking-controls="hand: right"></a-entity>
 
-            <!-- 座標表示用テキスト -->
-            <a-entity id="coordinates" text="value: Loading...; color: white;" position="0 1.8 -2"></a-entity>
+      <!-- VR空間に座標を表示するエンティティ -->
+      <a-entity 
+        id="coordinates" 
+        position="0 2 -3" 
+        text="value: Waiting for hand data; color: white; width: 6;"
+      ></a-entity>
 
-            <!-- コンソール表示用テキスト -->
-            <a-entity id="consoleOutput" text="value: Console output; color: yellow;" position="0 1.6 -2"></a-entity>
-        </a-scene>
-    </body>
+      <a-camera position="0 1.6 0"></a-camera>
+    </a-scene>
+  </body>
 </html>
