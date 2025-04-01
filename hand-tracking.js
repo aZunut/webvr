@@ -4,7 +4,6 @@ const joints = [
 ];
 
 function updateCoordinates(text) {
-  // エンティティが存在するかをチェックしてから操作
   const coordinatesEl = document.getElementById("coordinates");
   if (coordinatesEl) {
     coordinatesEl.setAttribute("text", "value", text);
@@ -26,7 +25,6 @@ AFRAME.registerComponent("track-hands", {
             if (joint) {
               const pos = joint.position;
               output += `${handId} - ${jointName}: (${pos.x.toFixed(3)}, ${pos.y.toFixed(3)}, ${pos.z.toFixed(3)})\n`;
-              console.log(`[${handId}] ${jointName}: (${pos.x}, ${pos.y}, ${pos.z})`);  // デバッグ用ログ
             }
           });
         } else {
@@ -37,9 +35,12 @@ AFRAME.registerComponent("track-hands", {
       }
     });
 
-    // 座標が空の場合でも更新を試みる（表示リセット）
     updateCoordinates(output || "No hand data");
   },
 });
 
-document.querySelector("a-scene").setAttribute("track-hands", "");
+// DOMが完全にロードされてからコンポーネントを登録する
+window.addEventListener("DOMContentLoaded", () => {
+  console.log("DOM fully loaded and parsed");
+  document.querySelector("a-scene").setAttribute("track-hands", "");
+});
