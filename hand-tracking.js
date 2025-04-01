@@ -39,11 +39,18 @@ AFRAME.registerComponent("track-hands", {
   },
 });
 
-// A-Frameのシーンが完全にロードされたときに処理を実行
+// A-Frameのシーンが完全にロードされ、エンティティが存在することを確認
 window.addEventListener("load", () => {
   const sceneEl = document.querySelector("a-scene");
   sceneEl.addEventListener("loaded", () => {
     console.log("A-Frame scene fully loaded");
-    sceneEl.setAttribute("track-hands", "");
+
+    // エンティティが確実に作成されてから処理を開始
+    const coordinatesEl = document.getElementById("coordinates");
+    if (coordinatesEl) {
+      sceneEl.setAttribute("track-hands", "");
+    } else {
+      console.error("Coordinates entity is missing. Please check the HTML.");
+    }
   });
 });
