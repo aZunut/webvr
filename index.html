@@ -7,18 +7,19 @@
   </head>
   <body>
     <a-scene vr-mode-ui="enabled: true">
-      <!-- ハンドトラッキングのコントローラー -->
+      <!-- 手の表示用 -->
       <a-entity id="left-hand" hand-tracking-controls="hand: left"></a-entity>
       <a-entity id="right-hand" hand-tracking-controls="hand: right"></a-entity>
 
-      <!-- VR空間に座標を表示するエンティティ -->
-      <a-entity 
-        id="coordinates" 
-        position="0 2 -3" 
-        text="value: Waiting for hand data; color: white; width: 6;"
+      <!-- 座標表示用テキスト -->
+      <a-entity
+      id="coordinates"
+      position="0 1.6 -1"
+      text="value: No hand data; color: #FFFFFF; width: 5;"
       ></a-entity>
 
+      <!-- カメラ -->
       <a-camera position="0 1.6 0"></a-camera>
-    </a-scene>
+      </a-scene>
   </body>
 </html>
