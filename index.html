@@ -6,23 +6,6 @@
         <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
         <script src="https://unpkg.com/aframe-environment-component@1.3.x/dist/aframe-environment-component.min.js"></script>
         <script src="./hand-tracking.js"></script>
-        <style>
-        #coordinates, #consoleOutput {
-          position: absolute;
-          top: 10px;
-          left: 10px;
-          background-color: rgba(0, 0, 0, 0.7);
-          color: white;
-          padding: 5px;
-          font-family: monospace;
-          white-space: pre;
-          max-height: 300px;
-          overflow: auto;
-        }
-        #consoleOutput {
-          top: 200px;
-    }
-  </style>
     </head>
     <body>
         <div id="coordinates">Loading...</div>
@@ -32,7 +15,14 @@
             <a-sphere grabbable id="movable-sphere" position="0 1.5 -1" radius="0.3" color="blue"></a-sphere>
             <a-entity id="leftHand" hand-tracking-controls="hand: left;"></a-entity>
             <a-entity id="rightHand" hand-tracking-controls="hand: right;"></a-entity>
+            <!-- カメラ -->
+            <a-camera position="0 1.6 0"></a-camera>
 
+            <!-- 座標表示用テキスト -->
+            <a-entity id="coordinates" text="value: Loading...; color: white;" position="0 1.8 -2"></a-entity>
+
+            <!-- コンソール表示用テキスト -->
+            <a-entity id="consoleOutput" text="value: Console output; color: yellow;" position="0 1.6 -2"></a-entity>
         </a-scene>
     </body>
 </html>
