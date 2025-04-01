@@ -39,8 +39,11 @@ AFRAME.registerComponent("track-hands", {
   },
 });
 
-// DOMが完全にロードされてからコンポーネントを登録する
-window.addEventListener("DOMContentLoaded", () => {
-  console.log("DOM fully loaded and parsed");
-  document.querySelector("a-scene").setAttribute("track-hands", "");
+// A-Frameのシーンが完全にロードされたときに処理を実行
+window.addEventListener("load", () => {
+  const sceneEl = document.querySelector("a-scene");
+  sceneEl.addEventListener("loaded", () => {
+    console.log("A-Frame scene fully loaded");
+    sceneEl.setAttribute("track-hands", "");
+  });
 });
