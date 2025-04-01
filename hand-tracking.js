@@ -14,6 +14,7 @@ function updateCoordinates(text) {
 
 AFRAME.registerComponent("track-hands", {
   tick: function () {
+    console.log("wa");
     let output = "";
     ["left-hand", "right-hand"].forEach((handId) => {
       const handEl = document.getElementById(handId);
