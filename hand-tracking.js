@@ -24,28 +24,9 @@ AFRAME.registerComponent("track-hands", {
   tick: function () {
     // let d = new Date();
     let output = "";
-    ["left-hand", "right-hand"].forEach((handId) => {
-      const handEl = document.getElementById(handId); // 文字列に一致するidをもつものを返す
-      if (handEl && handEl.components["hand-tracking-controls"]) {
-        const hand = handEl.hand;
-        if (hand) {
-          joints.forEach((jointName) => {
-            const joint = hand.joints[jointName];
-            output += jointName
-            if (joint) {
-              const pos = joint.position;
-            //   output += `${handId} - ${jointName}: (${pos.x.toFixed(3)}, ${pos.y.toFixed(3)}, ${pos.z.toFixed(3)})\n`;
-            }
-          });
-        } else {
-          console.warn(`Hand controller not found for ${handId}`);
-          output = `Hand controller not found for ${hand}`;
-        }
-      } else {
-        console.warn(`Hand element not found for ${handId}`);
-        output = `Hand element not found for ${handId}`;
-      }
-    });
+    rightHand = document.getElementById("right-hand");
+    var position = rightHand.indexTipPosition;
+    out = `${position}`
 
     // updateCoordinates(output || "No data");
     updateCoordinates(output);
