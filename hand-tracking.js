@@ -25,9 +25,7 @@ AFRAME.registerComponent("track-hands", {
     // let d = new Date();
     let output = "";
     const bones = document.getElementById('right-hand').components['hand-tracking-controls'].bones;
-    bones.forEach((bone, index) => {
-    console.log(`Joint ${index}:`, bone.getWorldPosition());
-    output = `Joint ${index}: ${bone.getWorldPosition()}`;
+    output = `${bones}`;
 });
 
 
