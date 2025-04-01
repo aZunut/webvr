@@ -24,9 +24,12 @@ AFRAME.registerComponent("track-hands", {
   tick: function () {
     // let d = new Date();
     let output = "";
-    rightHand = document.getElementById("right-hand");
-    var position = rightHand.indexTipPosition;
-    output = `${position}`
+    const bones = document.getElementById('rightHand').components['hand-tracking-controls'].bones;
+    bones.forEach((bone, index) => {
+    console.log(`Joint ${index}:`, bone.getWorldPosition());
+    output = `Joint ${index}: ${bone.getWorldPosition()}`;
+});
+
 
     // updateCoordinates(output || "No data");
     updateCoordinates(output);
