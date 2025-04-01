@@ -22,12 +22,12 @@ function checkComponentRegistration() {
 
 AFRAME.registerComponent("track-hands", {
   tick: function () {
-    let d = new Date();
+    // let d = new Date();
     let output = "";
     ["left-hand", "right-hand"].forEach((handId) => {
       const handEl = document.getElementById(handId); // 文字列に一致するidをもつものを返す
       if (handEl && handEl.components["hand-tracking-controls"]) {
-        const hand = handEl.components["hand-tracking-controls"].controller;
+        const hand = handEl.components["hand-tracking-controls"].hand;
         if (hand) {
           joints.forEach((jointName) => {
             const joint = hand.joints[jointName];
