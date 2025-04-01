@@ -2,10 +2,22 @@ const joints = [
   "wrist", "thumb-tip", "index-finger-tip", "middle-finger-tip", "ring-finger-tip", "pinky-finger-tip"
 ];
 
+// コンソール出力を画面に表示
+function logToScreen(message) {
+  const consoleDiv = document.getElementById("consoleOutput");
+  consoleDiv.textContent += message + "\n";
+  consoleDiv.scrollTop = consoleDiv.scrollHeight;  // 自動スクロール
+}
+
+// console.log と console.error を上書き
+console.log = (message) => logToScreen("[LOG] " + message);
+console.error = (message) => logToScreen("[ERROR] " + message);
+console.warn = (message) => logToScreen("[WARN] " + message);
+
 function updateCoordinates(text) {
   const coordinatesDiv = document.getElementById("coordinates");
   coordinatesDiv.textContent = text;
-  console.log(text);  // デバッグ用：座標をコンソールに出力
+  console.log(text);  // 座標も表示
 }
 
 AFRAME.registerComponent("track-hands", {
