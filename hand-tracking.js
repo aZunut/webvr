@@ -38,13 +38,16 @@ AFRAME.registerComponent("track-hands", {
           });
         } else {
           console.warn(`Hand controller not found for ${handId}`);
+          output = `Hand controller not found for ${handId}`;
         }
       } else {
         console.warn(`Hand element not found for ${handId}`);
+        output = `Hand element not found for ${handId}`;
       }
     });
 
-    updateCoordinates(output || "No data");
+    // updateCoordinates(output || "No data");
+    updateCoordinates(output);
   },
 });
 
