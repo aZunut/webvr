@@ -39,7 +39,7 @@ AFRAME.registerComponent("track-hands", {
           });
         } else {
           console.warn(`Hand controller not found for ${handId}`);
-          output = `Hand controller not found for ${handId}`;
+          output = `Hand controller not found for ${hand}`;
         }
       } else {
         console.warn(`Hand element not found for ${handId}`);
