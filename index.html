@@ -7,9 +7,7 @@
         <script src="https://unpkg.com/aframe-environment-component@1.3.x/dist/aframe-environment-component.min.js"></script>
     </head>
     <body>
-        <a-scene webxr = "requiredFeatures: hit-test,local-floor; 
-        options: dom-overlay,unbounded; 
-        overlayElement: #overlay;">
+        <a-scene xr-mode-ui="enabled: true">
             <a-box></a-box>
             <a-entity id = "leftHand" hand-controls = "hand: left; handModelStyle: highPoly; color: #ffcccc" > </a-entity> 
             <a-entity id = "rightHand" hand-controls = "hand: right; handModelStyle: highPoly; color: #ffcccc" > </a-entity>
