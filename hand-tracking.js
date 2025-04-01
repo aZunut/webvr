@@ -1,8 +1,8 @@
 const joints = [
-  "wrist", "thumb-tip", "index-finger-tip", "middle-finger-tip",
-  "ring-finger-tip", "pinky-finger-tip"
-];
-
+    "wrist", "thumb-tip", "index-finger-tip", "middle-finger-tip",
+    "ring-finger-tip", "pinky-finger-tip"
+  ];
+  
 function updateCoordinates(text) {
   const coordinatesEl = document.getElementById("coordinates");
   coordinatesEl.setAttribute("text", "value", text);
@@ -29,5 +29,5 @@ AFRAME.registerComponent("track-hands", {
     updateCoordinates(output || "No hand data");
   },
 });
-
+  
 document.querySelector("a-scene").setAttribute("track-hands", "");
