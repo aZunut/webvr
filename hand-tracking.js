@@ -26,7 +26,7 @@ AFRAME.registerComponent("track-hands", {
     let output = "";
     rightHand = document.getElementById("right-hand");
     var position = rightHand.indexTipPosition;
-    out = `${position}`
+    output = `${position}`
 
     // updateCoordinates(output || "No data");
     updateCoordinates(output);
