@@ -43,7 +43,7 @@ AFRAME.registerComponent("track-hands", {
       }
     });
 
-    updateCoordinates(output || "No hand data");
+    updateCoordinates(output || "No data");
   },
 });
 
