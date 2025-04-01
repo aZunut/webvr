@@ -1,8 +1,8 @@
 const joints = [
-  "wrist", "thumb-tip", "index-finger-tip", "middle-finger-tip",
-  "ring-finger-tip", "pinky-finger-tip"
-];
-
+    "wrist", "thumb-tip", "index-finger-tip", "middle-finger-tip",
+    "ring-finger-tip", "pinky-finger-tip"
+  ];
+  
 function updateCoordinates(text) {
   const coordinatesEl = document.getElementById("coordinates");
   if (coordinatesEl) {
@@ -12,9 +12,16 @@ function updateCoordinates(text) {
   }
 }
 
+function checkComponentRegistration() {
+    if (AFRAME.components["track-hands"]) {
+      console.log("track-handsコンポーネントは正常に登録されています");
+    } else {
+      console.log("track-handsコンポーネントは登録されていません");
+    }
+  }
+
 AFRAME.registerComponent("track-hands", {
   tick: function () {
-    console.log("wa");
     let output = "";
     ["left-hand", "right-hand"].forEach((handId) => {
       const handEl = document.getElementById(handId);
@@ -50,8 +57,10 @@ window.addEventListener("load", () => {
     const coordinatesEl = document.getElementById("coordinates");
     if (coordinatesEl) {
       sceneEl.setAttribute("track-hands", "");
+
     } else {
       console.error("Coordinates entity is missing. Please check the HTML.");
     }
   });
 });
+window.addEventListener("load", checkComponentRegistration);
