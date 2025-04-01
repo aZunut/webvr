@@ -30,9 +30,10 @@ AFRAME.registerComponent("track-hands", {
         if (hand) {
           joints.forEach((jointName) => {
             const joint = hand.joints[jointName];
+            output += jointName
             if (joint) {
               const pos = joint.position;
-              output += `${handId} - ${jointName}: (${pos.x.toFixed(3)}, ${pos.y.toFixed(3)}, ${pos.z.toFixed(3)})\n`;
+            //   output += `${handId} - ${jointName}: (${pos.x.toFixed(3)}, ${pos.y.toFixed(3)}, ${pos.z.toFixed(3)})\n`;
             }
           });
         } else {
