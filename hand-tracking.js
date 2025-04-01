@@ -4,9 +4,10 @@ const joints = [
 
 // コンソール出力を画面に表示
 function logToScreen(message) {
-  const consoleDiv = document.getElementById("consoleOutput");
-  consoleDiv.textContent += message + "\n";
-  consoleDiv.scrollTop = consoleDiv.scrollHeight;  // 自動スクロール
+  const consoleEl = document.getElementById("consoleOutput");
+  const currentText = consoleEl.getAttribute("text").value;
+  const newText = currentText + "\n" + message;
+  consoleEl.setAttribute("text", "value", newText.slice(-500));  // 最後の500文字だけ表示
 }
 
 // console.log と console.error を上書き
@@ -15,8 +16,8 @@ console.error = (message) => logToScreen("[ERROR] " + message);
 console.warn = (message) => logToScreen("[WARN] " + message);
 
 function updateCoordinates(text) {
-  const coordinatesDiv = document.getElementById("coordinates");
-  coordinatesDiv.textContent = text;
+  const coordinatesEl = document.getElementById("coordinates");
+  coordinatesEl.setAttribute("text", "value", text);
   console.log(text);  // 座標も表示
 }
 
