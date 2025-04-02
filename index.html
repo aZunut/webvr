@@ -1,25 +1,40 @@
-<!doctype html>
-<html lang="ja">
-  <head>
-    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/aframe-hand-tracking-controls@3.3.0/dist/aframe-hand-tracking-controls.min.js"></script>
-    <script src="./hand-tracking.js"></script>
-  </head>
-  <body>
-    <a-scene vr-mode-ui="enabled: true">
-      <!-- 手の表示用 -->
-      <a-entity id="left-hand" hand-tracking-controls="hand: left"></a-entity>
-      <a-entity id="right-hand" hand-tracking-controls="hand: right"></a-entity>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>A-Frame with WebXR Hand Tracking</title>
+    <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
+    <style>
+        body { margin: 0; }
+        #overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            font-family: Arial, sans-serif;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <div id="overlay">Loading...</div>
 
-      <!-- 座標表示用テキスト -->
-      <a-entity
-      id="coordinates"
-      position="0 0 -3"
-      text="value: No hand data; color: #FFFFFF; width: 5;"
-      ></a-entity>
+    <a-scene embedded vr-mode-ui="enabled: true">
+        <!-- VRカメラ -->
+        <a-camera position="0 1.6 0"></a-camera>
 
-      <!-- カメラ -->
-      <a-camera position="0 1.6 0"></a-camera>
-      </a-scene>
-  </body>
+        <!-- 右手表示用 -->
+        <a-entity id="right-hand" hand-tracking-controls="hand: right; handModelStyle: mesh;"></a-entity>
+
+        <!-- 左手表示用 -->
+        <a-entity id="left-hand" hand-tracking-controls="hand: left; handModelStyle: mesh;"></a-entity>
+
+        <!-- 座標表示 -->
+        <a-entity id="hand-coordinates" position="0 0 -3" text="value: No hand data; color: yellow;"></a-entity>
+    </a-scene>
+
+    <script src="hand-tracking.js"></script>
+</body>
 </html>
