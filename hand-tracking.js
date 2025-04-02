@@ -32,7 +32,7 @@ async function initWebXR() {
                 }
                 return handText;
             }
-            return "No hand";
+            return "No hand data";
         };
 
         const onXRFrame = (time, frame) => {
@@ -45,7 +45,7 @@ async function initWebXR() {
                 }
             }
 
-            overlay.textContent = handDataText || "No hand data";
+            overlay.textContent = handDataText || "No hand";
             handCoordinates.setAttribute("text", `value: ${handDataText}`);
 
             session.requestAnimationFrame(onXRFrame);
