@@ -32,7 +32,7 @@ async function initWebXR() {
                 }
                 return handText;
             }
-            return "No hand data";
+            return "No hand";
         };
 
         const onXRFrame = (time, frame) => {
