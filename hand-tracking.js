@@ -25,7 +25,7 @@ AFRAME.registerComponent("track-hands", {
     // let d = new Date();
     let output = "";
     const bones = document.getElementById('right-hand').components['hand-tracking-controls'].bones;
-    output = `${bones}`;
+    output = `${bones[0]}`;
 });
 
 
