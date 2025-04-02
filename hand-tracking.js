@@ -1,53 +1,60 @@
-const joints = [
-    "wrist", "thumb-tip", "index-finger-tip", "middle-finger-tip",
-    "ring-finger-tip", "pinky-finger-tip"
-  ];
-  
-function updateCoordinates(text) {
-  const coordinatesEl = document.getElementById("coordinates");
-  if (coordinatesEl) {
-    coordinatesEl.setAttribute("text", "value", text);
-  } else {
-    console.warn("Coordinates entity not found");
-  }
+const overlay = document.getElementById("overlay");
+const handCoordinates = document.getElementById("hand-coordinates");
+
+async function initWebXR() {
+    if (!navigator.xr) {
+        overlay.textContent = "WebXR is not supported on this device.";
+        return;
+    }
+
+    try {
+        const session = await navigator.xr.requestSession("immersive-vr", {
+            optionalFeatures: ["hand-tracking"]
+        });
+
+        overlay.textContent = "WebXR session started.";
+
+        const glCanvas = document.createElement("canvas");
+        document.body.appendChild(glCanvas);
+        const gl = glCanvas.getContext("webgl", { xrCompatible: true });
+
+        const xrRefSpace = await session.requestReferenceSpace("local");
+
+        const updateHandData = (inputSource) => {
+            if (inputSource.hand) {
+                let handText = "";
+                for (const jointName of inputSource.hand.keys()) {
+                    const joint = inputSource.hand.get(jointName);
+                    if (joint) {
+                        const pos = joint.transform.position;
+                        handText += `${jointName}: (${pos.x.toFixed(3)}, ${pos.y.toFixed(3)}, ${pos.z.toFixed(3)})\n`;
+                    }
+                }
+                return handText;
+            }
+            return "No hand data";
+        };
+
+        const onXRFrame = (time, frame) => {
+            const session = frame.session;
+            let handDataText = "";
+
+            for (const inputSource of session.inputSources) {
+                if (inputSource.hand) {
+                    handDataText += updateHandData(inputSource) + "\n";
+                }
+            }
+
+            overlay.textContent = handDataText || "No hand data";
+            handCoordinates.setAttribute("text", `value: ${handDataText}`);
+
+            session.requestAnimationFrame(onXRFrame);
+        };
+
+        session.requestAnimationFrame(onXRFrame);
+    } catch (error) {
+        overlay.textContent = `Error: ${error.message}`;
+    }
 }
 
-function checkComponentRegistration() {
-    if (AFRAME.components["track-hands"]) {
-      console.log("track-handsコンポーネントは正常に登録されています");
-    } else {
-      console.log("track-handsコンポーネントは登録されていません");
-    }
-  }
-
-AFRAME.registerComponent("track-hands", {
-  tick: function () {
-    // let d = new Date();
-    let output = "";
-    const bones = document.getElementById('right-hand').components['hand-tracking-controls'].bones;
-    output = `${bones[0]}`;
-});
-
-
-    // updateCoordinates(output || "No data");
-    updateCoordinates(output);
-  },
-});
-
-// A-Frameのシーンが完全にロードされ、エンティティが存在することを確認
-window.addEventListener("load", () => {
-  const sceneEl = document.querySelector("a-scene");
-  sceneEl.addEventListener("loaded", () => {
-    console.log("A-Frame scene fully loaded");
-
-    // エンティティが確実に作成されてから処理を開始
-    const coordinatesEl = document.getElementById("coordinates");
-    if (coordinatesEl) {
-      sceneEl.setAttribute("track-hands", "");
-
-    } else {
-      console.error("Coordinates entity is missing. Please check the HTML.");
-    }
-  });
-});
-window.addEventListener("load", checkComponentRegistration);
+initWebXR();
