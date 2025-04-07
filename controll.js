@@ -8,8 +8,8 @@ function movePlayer() {
         var position = camera.getAttribute('position');
         var rotation = camera.getAttribute('rotation');
 
-        position.x += -Math.cos((rotation.y - 90) * Math.PI / 180) * speed;
-        position.z += Math.sin((rotation.y - 90) * Math.PI / 180) * speed;
+        position.x += Math.cos((rotation.y - 90) * Math.PI / 180) * speed;
+        position.z += -Math.sin((rotation.y - 90) * Math.PI / 180) * speed;
         camera.setAttribute('position', position);
     }
 }
@@ -18,13 +18,13 @@ var t = 0;
 
 function render() {
     t += 0.01;
-    requestAnimationFrame(render);
+    requestAnimationFrame(render); //関数自身を呼び出し繰り返し処理する
     movePlayer();
 }
 render();
 
 AFRAME.registerComponent('collider-check', {
-    dependencies: ['raycaster'],
+    dependencies: ['raycaster'], //依存関係がある場合に初期化の順序を制御することができる
     init: function () {
         this.el.addEventListener('raycaster-intersection', function () {
             isIntersect = true;
