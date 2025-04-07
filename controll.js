@@ -4,7 +4,7 @@ var isIntersect = false;
 function movePlayer() {
     var camera = document.getElementById('camera');
 
-    if (camera && !isIntersect) {
+    if (camera && isIntersect) {
         var position = camera.getAttribute('position');
         var rotation = camera.getAttribute('rotation');
 
