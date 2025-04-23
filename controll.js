@@ -1,36 +1,22 @@
-var speed = 0.01;
-var isIntersect = false;
-
-function movePlayer() {
-    var camera = document.getElementById('camera');
-
-    if (camera && isIntersect) {
-        var position = camera.getAttribute('position');
-        var rotation = camera.getAttribute('rotation');
-
-        position.x += Math.cos((rotation.y - 90) * Math.PI / 180) * speed;
-        position.z += -Math.sin((rotation.y - 90) * Math.PI / 180) * speed;
-        camera.setAttribute('position', position);
-    }
-}
-
-var t = 0;
-
-function render() {
-    t += 0.01;
-    requestAnimationFrame(render); //関数自身を呼び出し繰り返し処理する
-    movePlayer();
-}
-render();
-
-AFRAME.registerComponent('collider-check', {
-    dependencies: ['raycaster'], //依存関係がある場合に初期化の順序を制御することができる
+AFRAME.registerComponent('wall-collider', {
+    schema: {
+      raycaster: { type: 'selector' },
+    },
+    multiple: true,
     init: function () {
-        this.el.addEventListener('raycaster-intersection', function () {
-            isIntersect = true;
-        });
-        this.el.addEventListener('raycaster-intersection-cleared', function () {
-            isIntersect = false;
-        });
+      this.face = null;
+      this.el.addEventListener('raycaster-intersection', (evt) => {
+        if (evt.target !== this.data.raycaster) return;
+        this.face = evt.detail.intersections[0].face.normal;
+      });
+      this.el.addEventListener('raycaster-intersection-cleared', (evt) => {
+        if (evt.target !== this.data.raycaster) return;
+        this.face = null;
+      });
+    },
+    tick: function () {
+      if (!this.face) return;
+      this.el.object3D.position.add(this.face.multiplyScalar(0.5));
     }
-});
+  });
+  
